@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Rastreio — Skincare Pro Store</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f0f14; color: #fafafa; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-container, .panel-container { background: #1a1a24; border-radius: 16px; padding: 40px; max-width: 500px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: #f43f5e; }
+    h2 { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: #6b7280; }
+    input, button { width: 100%; padding: 14px 16px; border-radius: 10px; font-size: 16px; font-family: inherit; border: 2px solid #e5e7eb; }
+    input { background: #fafafa; color: #0f0f14; margin-bottom: 12px; }
+    input:focus { outline: none; border-color: #e11d48; }
+    button { background: #e11d48; color: white; border: none; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+    button:hover { background: #be123c; transform: translateY(-2px); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .msg { padding: 14px; border-radius: 10px; margin: 12px 0; font-size: 15px; font-weight: 600; display: none; }
+    .msg--success { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid #10b981; }
+    .msg--error { background: rgba(225,29,72,0.1); color: #f43f5e; border: 1px solid #f43f5e; }
+    label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #9ca3af; }
+    .hidden { display: none; }
+    .link-correios { display: block; margin-top: 16px; text-align: center; color: #f43f5e; font-size: 14px; text-decoration: none; }
+    .link-correios:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <!-- TELA DE LOGIN -->
+  <div class="login-container" id="loginScreen">
+    <h1>🔒 Painel de Rastreio</h1>
+    <h2>Skincare Pro Store</h2>
+    <input type="password" id="adminPassword" placeholder="Digite a senha de acesso" onkeypress="if(event.key==='Enter')verificarSenha()">
+    <button onclick="verificarSenha()">Entrar</button>
+    <div class="msg msg--error" id="loginError">Senha incorreta. Tente novamente.</div>
+  </div>
+
+  <!-- PAINEL DE ENVIO -->
+  <div class="panel-container hidden" id="panelScreen">
+    <h1>📦 Enviar Rastreio</h1>
+    <h2>Dispare o e-mail de rastreio para o cliente</h2>
+    <label for="clienteEmail">E-mail do cliente</label>
+    <input type="email" id="clienteEmail" placeholder="exemplo@email.com">
+    <label for="clienteNome">Nome do cliente (opcional)</label>
+    <input type="text" id="clienteNome" placeholder="Nome do cliente">
+    <label for="pedidoId">Número do pedido</label>
+    <input type="text" id="pedidoId" placeholder="SPS-XXXXXX-XXXX">
+    <label for="rastreioCode">Código de rastreio (Correios)</label>
+    <input type="text" id="rastreioCode" placeholder="Ex: AB123456789BR">
+    <button id="sendBtn" onclick="enviarRastreio()">Enviar Rastreio para o Cliente</button>
+    <div class="msg msg--success" id="successMsg">✅ E-mail de rastreio enviado com sucesso!</div>
+    <div class="msg msg--error" id="errorMsg">❌ Erro ao enviar. Verifique os dados e tente novamente.</div>
+    <a href="https://www2.correios.com.br/sistemas/rastreio/" target="_blank" class="link-correios">🔗 Rastrear nos Correios</a>
+    <br>
+    <button onclick="logout()" style="background:#374151;margin-top:16px;">Sair</button>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = 'skincare2026';
+    const NETLIFY_FUNCTIONS_URL = '/.netlify/functions';
+
+    function verificarSenha() {
+      const senha = document.getElementById('adminPassword').value;
+      if (senha === ADMIN_PASSWORD) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('panelScreen').classList.remove('hidden');
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        setTimeout(() => { document.getElementById('loginError').style.display = 'none'; }, 3000);
+      }
+    }
+
+    function logout() {
+      document.getElementById('panelScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('adminPassword').value = '';
+    }
+
+    async function enviarRastreio() {
+      const email = document.getElementById('clienteEmail').value.trim();
+      const nome = document.getElementById('clienteNome').value.trim() || 'Cliente';
+      const pedidoId = document.getElementById('pedidoId').value.trim();
+      const rastreio = document.getElementById('rastreioCode').value.trim();
+
+      if (!email || !pedidoId || !rastreio) {
+        document.getElementById('errorMsg').textContent = '❌ Preencha e-mail, pedido e código de rastreio.';
+        document.getElementById('errorMsg').style.display = 'block';
+        setTimeout(() => { document.getElementById('errorMsg').style.display = 'none'; }, 4000);
+        return;
+      }
+
+      const btn = document.getElementById('sendBtn');
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch(NETLIFY_FUNCTIONS_URL + '/send-tracking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cliente: { nome: nome, email: email },
+            pedidoId: pedidoId,
+            rastreio: rastreio
+          })
+        });
+
+        if (response.ok) {
+          document.getElementById('successMsg').style.display = 'block';
+          document.getElementById('clienteEmail').value = '';
+          document.getElementById('clienteNome').value = '';
+          document.getElementById('pedidoId').value = '';
+          document.getElementById('rastreioCode').value = '';
+          setTimeout(() => { document.getElementById('successMsg').style.display = 'none'; }, 5000);
+        } else {
+          throw new Error('Erro na função');
+        }
+      } catch (error) {
+        document.getElementById('errorMsg').textContent = '❌ Erro ao enviar. Verifique se a função está configurada.';
+        document.getElementById('errorMsg').style.display = 'block';
+        setTimeout(() => { document.getElementById('errorMsg').style.display = 'none'; }, 5000);
+      }
+
+      btn.textContent = 'Enviar Rastreio para o Cliente';
+      btn.disabled = false;
+    }
+  </script>
+</body>
+</html>
