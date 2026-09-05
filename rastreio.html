@@ -26,7 +26,6 @@
   </style>
 </head>
 <body>
-  <!-- TELA DE LOGIN -->
   <div class="login-container" id="loginScreen">
     <h1>🔒 Painel de Rastreio</h1>
     <h2>Skincare Pro Store</h2>
@@ -35,20 +34,21 @@
     <div class="msg msg--error" id="loginError">Senha incorreta. Tente novamente.</div>
   </div>
 
-  <!-- PAINEL DE ENVIO -->
   <div class="panel-container hidden" id="panelScreen">
     <h1>📦 Enviar Rastreio</h1>
-    <h2>Dispare o e-mail de rastreio para o cliente</h2>
+    <h2>Dispare o e-mail e WhatsApp de rastreio para o cliente</h2>
+    <label for="clienteNome">Nome do cliente</label>
+    <input type="text" id="clienteNome" placeholder="Nome do cliente">
     <label for="clienteEmail">E-mail do cliente</label>
     <input type="email" id="clienteEmail" placeholder="exemplo@email.com">
-    <label for="clienteNome">Nome do cliente (opcional)</label>
-    <input type="text" id="clienteNome" placeholder="Nome do cliente">
+    <label for="clientePhone">WhatsApp do cliente (com DDD)</label>
+    <input type="tel" id="clientePhone" placeholder="Ex: 31984815086">
     <label for="pedidoId">Número do pedido</label>
     <input type="text" id="pedidoId" placeholder="SPS-XXXXXX-XXXX">
     <label for="rastreioCode">Código de rastreio (Correios)</label>
     <input type="text" id="rastreioCode" placeholder="Ex: AB123456789BR">
     <button id="sendBtn" onclick="enviarRastreio()">Enviar Rastreio para o Cliente</button>
-    <div class="msg msg--success" id="successMsg">✅ E-mail de rastreio enviado com sucesso!</div>
+    <div class="msg msg--success" id="successMsg">✅ Rastreio enviado por e-mail e WhatsApp!</div>
     <div class="msg msg--error" id="errorMsg">❌ Erro ao enviar. Verifique os dados e tente novamente.</div>
     <a href="https://www2.correios.com.br/sistemas/rastreio/" target="_blank" class="link-correios">🔗 Rastrear nos Correios</a>
     <br>
@@ -77,12 +77,13 @@
     }
 
     async function enviarRastreio() {
-      const email = document.getElementById('clienteEmail').value.trim();
       const nome = document.getElementById('clienteNome').value.trim() || 'Cliente';
+      const email = document.getElementById('clienteEmail').value.trim();
+      const telefone = document.getElementById('clientePhone').value.trim();
       const pedidoId = document.getElementById('pedidoId').value.trim();
-      const rastreio = document.getElementById('rastreioCode').value.trim();
+      const trackingCode = document.getElementById('rastreioCode').value.trim();
 
-      if (!email || !pedidoId || !rastreio) {
+      if (!email || !pedidoId || !trackingCode) {
         document.getElementById('errorMsg').textContent = '❌ Preencha e-mail, pedido e código de rastreio.';
         document.getElementById('errorMsg').style.display = 'block';
         setTimeout(() => { document.getElementById('errorMsg').style.display = 'none'; }, 4000);
@@ -98,9 +99,9 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            cliente: { nome: nome, email: email },
+            cliente: { nome: nome, email: email, telefone: telefone },
             pedidoId: pedidoId,
-            rastreio: rastreio
+            trackingCode: trackingCode
           })
         });
 
@@ -108,6 +109,7 @@
           document.getElementById('successMsg').style.display = 'block';
           document.getElementById('clienteEmail').value = '';
           document.getElementById('clienteNome').value = '';
+          document.getElementById('clientePhone').value = '';
           document.getElementById('pedidoId').value = '';
           document.getElementById('rastreioCode').value = '';
           setTimeout(() => { document.getElementById('successMsg').style.display = 'none'; }, 5000);
