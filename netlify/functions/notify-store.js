@@ -1,3 +1,8 @@
+// ============================================================
+// NOTIFY STORE - SKINCARE PRO STORE
+// Envia notificação para a loja quando um novo pedido é aprovado
+// ============================================================
+
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -9,9 +14,21 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.handler = async (event) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Método não permitido" }),
     };
   }
@@ -20,21 +37,30 @@ exports.handler = async (event) => {
     const pedido = JSON.parse(event.body);
     const { pedidoId, cliente, itens, total, data } = pedido;
 
-    const dataFormatada = new Date(data).toLocaleString("pt-BR", {
-      timeZone: "America/Sao_Paulo",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    // CORRIGIDO: Tratar itens ausentes (o webhook não envia os itens)
+    const itensTexto = (itens && Array.isArray(itens) && itens.length > 0)
+      ? itens.map((i) =>
+          `• ${i.nome || i.title || 'Produto'} — ${i.quantidade || i.qty || 1}x — R$ ${((i.preco || i.unit_price || 0) * (i.quantidade || i.qty || 1)).toLocaleString("pt-BR")},00`
+        ).join("\n")
+      : "Detalhes dos itens não disponíveis (verifique no painel do Mercado Pago)";
 
-    const itensTexto = itens
-      .map(
-        (i) =>
-          `• ${i.nome} — ${i.quantidade}x — R$ ${(i.preco * i.quantidade).toLocaleString("pt-BR")},00`
-      )
-      .join("\n");
+    const dataFormatada = data
+      ? new Date(data).toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : new Date().toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
 
     const html = `
       <div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;background:#fafafa;">
@@ -47,7 +73,7 @@ exports.handler = async (event) => {
             <p style="font-size:14px;color:#6b7280;margin:4px 0;"><strong>Data:</strong> ${dataFormatada}</p>
             <p style="font-size:14px;color:#6b7280;margin:4px 0;"><strong>Cliente:</strong> ${cliente.nome}</p>
             <p style="font-size:14px;color:#6b7280;margin:4px 0;"><strong>E-mail:</strong> ${cliente.email}</p>
-            <p style="font-size:14px;color:#6b7280;margin:4px 0;"><strong>WhatsApp:</strong> ${cliente.telefone}</p>
+            <p style="font-size:14px;color:#6b7280;margin:4px 0;"><strong>WhatsApp:</strong> ${cliente.telefone || 'Não informado'}</p>
           </div>
           <div style="background:white;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
             <h3 style="font-size:16px;margin:0 0 12px;">Itens do Pedido:</h3>
@@ -61,6 +87,7 @@ exports.handler = async (event) => {
       </div>
     `;
 
+    // CORRIGIDO: crases no from e subject
     await transporter.sendMail({
       from: `"Skincare Pro Store (Pedidos)" <${process.env.GMAIL_USER}>`,
       to: pedido.store_email || "dmattosmedical@gmail.com",
@@ -71,12 +98,14 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({ success: true, message: "Loja notificada" }),
     };
   } catch (error) {
     console.error("Erro notify-store:", error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ success: false, error: error.message }),
     };
   }
