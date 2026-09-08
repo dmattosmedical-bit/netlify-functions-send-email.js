@@ -1,10 +1,27 @@
+// ============================================================
+// WEBHOOK - SKINCARE PRO STORE
+// Recebe notificações de pagamento do Mercado Pago
+// ============================================================
+
 exports.handler = async (event) => {
   const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json'
   };
 
+  // Responde ao preflight CORS
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
   }
 
   try {
@@ -15,13 +32,19 @@ exports.handler = async (event) => {
       const paymentId = body.data?.id || body.resource?.split('/').pop();
 
       if (!paymentId) {
-        return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ ok: true })
+        };
       }
 
       // Buscar detalhes do pagamento na API do MP
+      // CORRIGIDO: crases e parênteses no fetch
+      // CORRIGIDO: mesma variável de ambiente da função create-preference
       const payResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
         headers: {
-          'Authorization': `Bearer ${process.env.MERCADO_PAGO_ACCESS_TOKEN}`
+          'Authorization': `Bearer ${process.env.MP_ACCESS_TOKEN}`
         }
       });
 
@@ -29,28 +52,38 @@ exports.handler = async (event) => {
 
       if (!payResponse.ok) {
         console.error('Erro ao buscar pagamento:', payment);
-        return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ ok: true })
+        };
       }
 
-      const status = payment.status; // approved, rejected, pending, in_process
+      const status = payment.status;
       const externalRef = payment.external_reference;
       const amount = payment.transaction_amount;
       const payerEmail = payment.payer?.email || '';
       const payerName = payment.payer?.first_name || payment.payer?.name || '';
       const paymentMethod = payment.payment_method_id;
 
+      // CORRIGIDO: crases no console.log
       console.log(`Pagamento ${paymentId} - Status: ${status} - Pedido: ${externalRef} - Valor: ${amount}`);
 
       // Só processar se aprovado
       if (status === 'approved') {
         // 1. Enviar e-mail de confirmação para o cliente
         try {
+          // CORRIGIDO: crases e parênteses no fetch
           await fetch(`${process.env.URL}/.netlify/functions/send-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               pedidoId: externalRef,
-              cliente: { nome: payerName, email: payerEmail, telefone: payment.metadata?.cliente_telefone || '' },
+              cliente: {
+                nome: payerName,
+                email: payerEmail,
+                telefone: payment.metadata?.cliente_telefone || ''
+              },
               total: amount,
               status: 'approved',
               pagamento: { metodo: paymentMethod, id: paymentId }
@@ -84,7 +117,11 @@ exports.handler = async (event) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               pedidoId: externalRef,
-              cliente: { nome: payerName, email: payerEmail, telefone: payment.metadata?.cliente_telefone || '' },
+              cliente: {
+                nome: payerName,
+                email: payerEmail,
+                telefone: payment.metadata?.cliente_telefone || ''
+              },
               total: amount,
               status: 'approved'
             })
@@ -106,9 +143,9 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({ ok: true })
     };
+
   } catch (error) {
     console.error('Erro webhook:', error);
-    // Ainda retornar 200 para evitar reenvios desnecessários
     return {
       statusCode: 200,
       headers,
