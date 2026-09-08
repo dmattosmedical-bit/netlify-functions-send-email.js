@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamento Aprovado — Skincare Pro Store</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: #f9fafb; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .card { background: white; border-radius: 20px; padding: 48px; max-width: 480px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 28px; font-weight: 800; color: #0f0f14; margin-bottom: 12px; }
+    p { font-size: 16px; color: #6b7280; line-height: 1.6; margin-bottom: 16px; }
+    .pedido-id { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px; margin: 20px 0; }
+    .pedido-id strong { color: #15803d; font-size: 18px; }
+    .btn { display: inline-block; margin-top: 24px; background: #e11d48; color: white; padding: 14px 36px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px; }
+    .btn:hover { background: #be123c; }
+    .whatsapp { display: inline-block; margin-top: 12px; color: #10b981; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✅</div>
+    <h1>Pagamento Aprovado!</h1>
+    <p>Seu pagamento foi confirmado e seu pedido já está sendo preparado para envio.</p>
+    <p>Você receberá o código de rastreio por e-mail e WhatsApp em breve.</p>
+    <div class="pedido-id">
+      <p>Pedido: <strong id="pedidoId">—</strong></p>
+    </div>
+    <a href="/" class="btn">Voltar à loja</a>
+    <br>
+    <a href="https://wa.me/5531984815086?text=Olá! Meu pagamento foi aprovado e quero acompanhar meu pedido." class="whatsapp">📱 Acompanhar pelo WhatsApp</a>
+  </div>
+  <script>
+    // Recuperar dados do pedido do localStorage
+    var pedido = localStorage.getItem('ultimoPedido');
+    if (pedido) {
+      var dados = JSON.parse(pedido);
+      document.getElementById('pedidoId').textContent = dados.pedidoId;
+      localStorage.removeItem('ultimoPedido');
+    }
+  </script>
+</body>
+</html>
