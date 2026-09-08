@@ -1,71 +1,60 @@
+// ============================================================
+// SERVERLESS FUNCTION - SKINCARE PRO STORE
+// Cria a preferência de pagamento no Mercado Pago
+// O ACCESS TOKEN fica seguro como variável de ambiente no Netlify
+// ============================================================
+
+const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+
 exports.handler = async (event) => {
-  // CORS headers
+  // Permite CORS (necessário para o frontend chamar esta function)
   const headers = {
-    'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
+    'Content-Type': 'application/json'
   };
 
+  // Responde ao preflight CORS
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+    return { statusCode: 204, headers, body: '' };
   }
 
+  // Rejeita métodos que não sejam POST
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
   }
 
   try {
     const body = JSON.parse(event.body);
 
-    // Montar a preferência para o Mercado Pago
-    const preference = {
-      items: body.itens.map(item => ({
-        id: body.pedidoId,
-        title: item.nome,
-        unit_price: Number(item.preco),
-        quantity: Number(item.quantidade),
-        currency_id: 'BRL',
-        description: 'Produto estético original - Skincare Pro Store'
-      })),
-      payer: {
-        name: body.cliente.nome,
-        email: body.cliente.email,
-        phone: {
-          number: body.cliente.telefone
-        }
-      },
-      back_urls: {
-        success: `${process.env.URL}/pedido-sucesso.html`,
-        failure: `${process.env.URL}/pedido-erro.html`,
-        pending: `${process.env.URL}/pedido-pendente.html`
-      },
-      auto_return: 'approved',
-      statement_descriptor: 'SKINCARE PRO STORE',
-      external_reference: body.pedidoId,
-      notification_url: `${process.env.URL}/.netlify/functions/webhook-mercadopago`,
-      metadata: {
-        pedido_id: body.pedidoId,
-        store_email: body.store_email,
-        whatsapp_business_id: body.whatsapp_business_id,
-        cliente_telefone: body.cliente.telefone
-      }
-    };
+    // Validação básica
+    if (!body.items || !Array.isArray(body.items) || body.items.length === 0) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Items array is required' })
+      };
+    }
 
-    // Chamada direta à API do Mercado Pago (sem dependências externas)
+    // Chama a API do Mercado Pago para criar a preferência
     const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.MERCADO_PAGO_ACCESS_TOKEN}`
+        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
       },
-      body: JSON.stringify(preference)
+      body: JSON.stringify(body)
     });
 
     const mpData = await mpResponse.json();
 
     if (!mpResponse.ok) {
-      console.error('Erro MP:', mpData);
+      console.error('Erro API MP:', mpData);
       return {
         statusCode: mpResponse.status,
         headers,
@@ -73,17 +62,18 @@ exports.handler = async (event) => {
       };
     }
 
+    // Retorna o preferenceId e init_point para o frontend
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         preferenceId: mpData.id,
-        initPoint: mpData.init_point,
-        sandboxInitPoint: mpData.sandbox_init_point
+        initPoint: mpData.init_point
       })
     };
+
   } catch (error) {
-    console.error('Erro create-preference:', error);
+    console.error('Erro na function:', error);
     return {
       statusCode: 500,
       headers,
