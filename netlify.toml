@@ -1,6 +1,12 @@
 [build]
   functions = "netlify/functions"
 
+[context.production.environment]
+  NODE_VERSION = "18"
+
+[context.deploy-preview.environment]
+  NODE_VERSION = "18"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
