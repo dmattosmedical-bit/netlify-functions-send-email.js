@@ -1,3 +1,8 @@
+// ============================================================
+// SEND TRACKING - SKINCARE PRO STORE
+// Envia código de rastreio por e-mail e WhatsApp
+// ============================================================
+
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -9,9 +14,21 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.handler = async (event) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Método não permitido" }),
     };
   }
@@ -22,6 +39,7 @@ exports.handler = async (event) => {
       cliente,
       trackingCode,
       transportadora = "Correios",
+      // CORRIGIDO: crases no template literal
       linkRastreio = `https://www.linkcorreios.com.br/?id=${trackingCode || ""}`,
     } = JSON.parse(event.body);
 
@@ -48,6 +66,7 @@ exports.handler = async (event) => {
       </div>
     `;
 
+    // CORRIGIDO: crases no from e subject
     await transporter.sendMail({
       from: `"Skincare Pro Store" <${process.env.GMAIL_USER}>`,
       to: cliente.email,
@@ -55,6 +74,7 @@ exports.handler = async (event) => {
       html,
     });
 
+    // Envio por WhatsApp
     const TOKEN = process.env.WHATSAPP_TOKEN;
     const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_ID;
 
@@ -62,16 +82,18 @@ exports.handler = async (event) => {
       const telefone = cliente.telefone.replace(/\D/g, "");
       const telefoneFinal = telefone.startsWith("55") ? telefone : "55" + telefone;
 
+      // CORRIGIDO: crases no template literal da mensagem
       const mensagemWpp = `📦 *Pedido despachado!*\n\n${cliente.nome}, seu pedido ${pedidoId} foi enviado!\n\n*Código de rastreio:*\n${trackingCode}\n\nRastrear: ${linkRastreio}\n\n⏱️ Prazo: 2-3 dias úteis\nDúvidas? (31) 98481-5086`;
 
       try {
+        // CORRIGIDO: crases na URL e no Authorization
         await fetch(
           `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`,
           {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${TOKEN}`,
-              "Content-Type": "application/json",
+              'Authorization': `Bearer ${TOKEN}`,
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               messaging_product: "whatsapp",
@@ -89,6 +111,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({
         success: true,
         message: "Rastreio enviado por e-mail e WhatsApp",
@@ -98,6 +121,7 @@ exports.handler = async (event) => {
     console.error("Erro send-tracking:", error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ success: false, error: error.message }),
     };
   }
