@@ -1,3 +1,8 @@
+// ============================================================
+// SEND EMAIL - SKINCARE PRO STORE
+// Envia e-mail de confirmação para o cliente após pagamento aprovado
+// ============================================================
+
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -9,9 +14,21 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.handler = async (event) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Método não permitido" }),
     };
   }
@@ -20,25 +37,34 @@ exports.handler = async (event) => {
     const pedido = JSON.parse(event.body);
     const { pedidoId, cliente, itens, total, data } = pedido;
 
-    const dataFormatada = new Date(data).toLocaleString("pt-BR", {
-      timeZone: "America/Sao_Paulo",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    const itensHtml = itens
-      .map(
-        (item) =>
+    // CORRIGIDO: Tratar itens ausentes (o webhook não envia os itens)
+    const itensHtml = (itens && Array.isArray(itens) && itens.length > 0)
+      ? itens.map((item) =>
           `<tr>
-            <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${item.nome}</td>
-            <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;">${item.quantidade}</td>
-            <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:right;">R$ ${(item.preco * item.quantidade).toLocaleString("pt-BR")},00</td>
+            <td style="padding:8px;border-bottom:1px solid #e5e7eb;">${item.nome || item.title || 'Produto'}</td>
+            <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;">${item.quantidade || item.qty || 1}</td>
+            <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:right;">R$ ${((item.preco || item.unit_price || 0) * (item.quantidade || item.qty || 1)).toLocaleString("pt-BR")},00</td>
           </tr>`
-      )
-      .join("");
+        ).join("")
+      : `<tr><td colspan="3" style="padding:8px;text-align:center;color:#6b7280;">Pedido confirmado — ver detalhes no painel da loja</td></tr>`;
+
+    const dataFormatada = data
+      ? new Date(data).toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : new Date().toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
 
     const html = `
       <div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;background:#fafafa;padding:0;">
@@ -84,6 +110,7 @@ exports.handler = async (event) => {
       </div>
     `;
 
+    // CORRIGIDO: crases no from e subject
     await transporter.sendMail({
       from: `"Skincare Pro Store" <${process.env.GMAIL_USER}>`,
       to: cliente.email,
@@ -93,12 +120,14 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({ success: true, message: "E-mail enviado ao cliente" }),
     };
   } catch (error) {
     console.error("Erro send-email:", error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ success: false, error: error.message }),
     };
   }
