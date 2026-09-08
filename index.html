@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skincare Pro Store — Produtos Estéticos Originais para Profissionais</title>
   <meta name="description" content="Dysport, Sculptra, LineBody, Nabota, Momm, Botox Allergan e mais produtos estéticos originais num único carrinho. Entrega expressa em 2-3 dias úteis. Preço de fábrica. Nota fiscal.">
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <style>
     :root {
       --primary: #e11d48;
@@ -386,7 +387,7 @@
         <div class="guarantee__item"><div class="guarantee__icon">🔄</div><h3 class="guarantee__item-title">Produto chegou com problema?</h3><p class="guarantee__item-text">Troca garantida em até 7 dias, sem burocracia.</p></div>
         <div class="guarantee__item"><div class="guarantee__icon">🧾</div><h3 class="guarantee__item-title">Comprovação total</h3><p class="guarantee__item-text">Nota fiscal em todos os pedidos e procedência direta dos laboratórios oficiais.</p></div>
       </div>
-      <blockquote class="guarantee__quote">Nós só ganhamos se você ganha. Se algo não estiver certo, nós resolvemos — do seu jeito, sem formulário de 12 páginas e sem "aguarde 48h para retorno do setor competente".</blockquote>
+      <blockquote class="guarantee__quote">Nós só ganhamos se você ganha. Se algo não estiver direito, nós resolvemos — do seu jeito, sem formulário de 12 páginas e sem "aguarde 48h para retorno do setor competente".</blockquote>
     </div>
   </section>
   <section class="urgency section" id="urgency">
@@ -414,7 +415,7 @@
         <details class="faq__item"><summary class="faq__question">1. Os produtos são originais?<span class="faq__icon">+</span></summary><p class="faq__answer">Sim, 100% originais. Compramos direto dos laboratórios oficiais. Todos os pedidos acompanham nota fiscal e você pode verificar a procedência diretamente com o fabricante através do número do lote.</p></details>
         <details class="faq__item"><summary class="faq__question">2. Preciso de CRM para comprar?<span class="faq__icon">+</span></summary><p class="faq__answer">Nossa loja é voltada para profissionais de estética e enfermeiros. Não exigimos validação de CRM no momento da compra, mas os produtos devem ser utilizados por profissionais habilitados para aplicação.</p></details>
         <details class="faq__item"><summary class="faq__question">3. Qual o prazo de entrega?<span class="faq__icon">+</span></summary><p class="faq__answer">A média é de 2 a 3 dias úteis para todo Brasil. Você recebe o código de rastreio automaticamente após a confirmação do pagamento, e pode acompanhar o status do seu pedido a qualquer momento.</p></details>
-        <details class="faq__item"><summary class="faq__question">4. Como funciona o pagamento?<span class="faq__icon">+</span></summary><p class="faq__answer">Aceitamos PIX (instantâneo), cartão de crédito e boleto bancário. O pedido é liberado para envio imediatamente após a confirmação do pagamento (no caso do boleto, em até 1 dia útil após o pagamento).</p></details>
+        <details class="faq__item"><summary class="faq__question">4. Como funciona o pagamento?<span class="faq__icon">+</span></summary><p class="faq__answer">Aceitamos PIX (instantâneo), cartão de crédito e boleto bancário. O pagamento é processado pelo Mercado Pago. O pedido é liberado para envio imediatamente após a confirmação do pagamento.</p></details>
         <details class="faq__item"><summary class="faq__question">5. Tem pedido mínimo?<span class="faq__icon">+</span></summary><p class="faq__answer">Não. Você compra o que precisa, quando precisa. Sem valor mínimo, sem quantidade mínima por produto.</p></details>
         <details class="faq__item"><summary class="faq__question">6. Vocês emitem nota fiscal?<span class="faq__icon">+</span></summary><p class="faq__answer">Sim. Todos os pedidos acompanham nota fiscal eletrônica, enviada junto com o código de rastreio. Você pode usar para abatimento de custos na sua clínica.</p></details>
         <details class="faq__item"><summary class="faq__question">7. E se o produto chegar com problema?<span class="faq__icon">+</span></summary><p class="faq__answer">Garantia total: troca gratuita ou reembolso integral em até 7 dias. É só entrar em contato via WhatsApp ou pelo site com o número do pedido. Sem burocracia.</p></details>
@@ -460,262 +461,294 @@
         <span>Total:</span>
         <span class="cart-total-value" id="cartTotal">R$ 0,00</span>
       </div>
-      <button class="btn btn--primary btn--large btn--block" id="checkoutBtn">Finalizar Pedido</button>
+      <button class="btn btn--primary btn--large btn--block" id="checkoutBtn">Pagar com Mercado Pago</button>
     </div>
   </aside>
-   <script>
-  // ===== CONFIGURAÇÕES =====
-  const NETLIFY_FUNCTIONS_URL = '/.netlify/functions';
-  const WHATSAPP_NUMBER = '5531984815086';
-  const WHATSAPP_PHONE_ID = '1346771215179230';
-  const STORE_EMAIL = 'dmattosmedical@gmail.com';
-  const MP_PUBLIC_KEY = 'APP_USR-779f3a83-030d-4be7-9eca-544519d3264e';
+  <script>
+    // ===== CONFIGURAÇÕES =====
+    const MP_PUBLIC_KEY = 'APP_USR-779f3a83-030d-4be7-9eca-544519d3264e';
+    const WHATSAPP_NUMBER = '5531984815086';
+    const STORE_EMAIL = 'dmattosmedical@gmail.com';
 
-  // ===== ESTADO DO CARRINHO =====
-  const cart = [];
-  const precos = {
-    'Dysport': 1600,
-    'Sculptra': 1600,
-    'LineBody Hard': 1600,
-    'LineBody Soft': 1600,
-    'Nabota': 1600,
-    'Momm': 1600,
-    'Botox Allergan': 1600
-  };
+    // ===== ESTADO DO CARRINHO =====
+    const cart = [];
+    const precos = {
+      'Dysport': 1600,
+      'Sculptra': 1600,
+      'LineBody Hard': 1600,
+      'LineBody Soft': 1600,
+      'Nabota': 1600,
+      'Momm': 1600,
+      'Botox Allergan': 1600
+    };
 
-  const cartSidebar = document.getElementById('cartSidebar');
-  const cartOverlay = document.getElementById('cartOverlay');
-  const cartClose = document.getElementById('cartClose');
-  const cartItems = document.getElementById('cartItems');
-  const cartTotal = document.getElementById('cartTotal');
-  const cartCount = document.getElementById('cartCount');
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  const floatingCart = document.getElementById('floatingCart');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartClose = document.getElementById('cartClose');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const cartCount = document.getElementById('cartCount');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const floatingCart = document.getElementById('floatingCart');
 
-  // ===== FUNÇÕES DO CARRINHO =====
-  function openCart() {
-    cartSidebar.classList.add('cart-sidebar--open');
-    cartOverlay.classList.add('cart-overlay--active');
-  }
-  function closeCart() {
-    cartSidebar.classList.remove('cart-sidebar--open');
-    cartOverlay.classList.remove('cart-overlay--active');
-  }
-  function addToCart(productName) {
-    const existing = cart.find(item => item.name === productName);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ name: productName, price: precos[productName] || 1600, qty: 1 });
+    // ===== FUNÇÕES DO CARRINHO =====
+    function openCart() {
+      cartSidebar.classList.add('cart-sidebar--open');
+      cartOverlay.classList.add('cart-overlay--active');
     }
-    updateCart();
-    openCart();
-  }
-  function removeFromCart(productName) {
-    const index = cart.findIndex(item => item.name === productName);
-    if (index !== -1) {
-      cart.splice(index, 1);
-      updateCart();
+    function closeCart() {
+      cartSidebar.classList.remove('cart-sidebar--open');
+      cartOverlay.classList.remove('cart-overlay--active');
     }
-  }
-  function changeQty(productName, delta) {
-    const item = cart.find(i => i.name === productName);
-    if (item) {
-      item.qty += delta;
-      if (item.qty <= 0) {
-        removeFromCart(productName);
+    function addToCart(productName) {
+      const existing = cart.find(item => item.name === productName);
+      if (existing) {
+        existing.qty += 1;
       } else {
+        cart.push({ name: productName, price: precos[productName] || 1600, qty: 1 });
+      }
+      updateCart();
+      openCart();
+    }
+    function removeFromCart(productName) {
+      const index = cart.findIndex(item => item.name === productName);
+      if (index !== -1) {
+        cart.splice(index, 1);
         updateCart();
       }
     }
-  }
-  function updateCart() {
-    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-    cartCount.textContent = totalItems;
-    if (cart.length === 0) {
-      cartItems.innerHTML = '<p class="cart-empty">Seu carrinho está vazio.</p>';
-    } else {
-      cartItems.innerHTML = cart.map(item =>
-        '<div class="cart-item">' +
-          '<div class="cart-item__info">' +
-            '<h4 class="cart-item__name">' + item.name + '</h4>' +
-            '<p class="cart-item__price">R$ ' + item.price.toLocaleString('pt-BR') + ',00</p>' +
-          '</div>' +
-          '<div class="cart-item__controls">' +
-            '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', -1)">−</button>' +
-            '<span class="qty-value">' + item.qty + '</span>' +
-            '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', 1)">+</button>' +
-            '<button class="cart-item__remove" onclick="removeFromCart(\'' + item.name + '\')">🗑</button>' +
-          '</div>' +
-        '</div>'
-      ).join('');
-    }
-    var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
-    cartTotal.textContent = 'R$ ' + total.toLocaleString('pt-BR') + ',00';
-  }
-
-  // ===== GERAR ID DO PEDIDO =====
-  function gerarPedidoId() {
-    var now = new Date();
-    var timestamp = now.getTime().toString(36).toUpperCase();
-    var random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return 'SPS-' + timestamp + '-' + random;
-  }
-
-  // ===== FALLBACK WHATSAPP =====
-  function abrirWhatsAppCheckout() {
-    var lista = cart.map(function(i) {
-      return '• ' + i.name + ' x' + i.qty + ' — R$ ' + (i.price * i.qty).toLocaleString('pt-BR') + ',00';
-    }).join('%0A');
-    var totalVal = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
-    var nome = document.getElementById('customerName').value.trim();
-    var email = document.getElementById('customerEmail').value.trim();
-    var tel = document.getElementById('customerPhone').value.trim();
-    var msg = 'Olá! Vim pelo site e quero finalizar meu pedido:%0A%0A' +
-      'Nome: ' + nome + '%0A' +
-      'E-mail: ' + email + '%0A' +
-      'WhatsApp: ' + tel + '%0A%0A' +
-      lista + '%0A%0A*Total: R$ ' + totalVal.toLocaleString('pt-BR') + ',00*';
-    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
-  }
-
-  // ===== TELA DE SUCESSO =====
-  function mostrarSucesso(pedidoId, nome) {
-    var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    overlay.innerHTML =
-      '<div style="background:white;border-radius:16px;padding:40px;max-width:440px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">' +
-        '<div style="font-size:56px;margin-bottom:16px;">✅</div>' +
-        '<h2 style="font-size:24px;font-weight:800;margin-bottom:12px;color:#0f0f14;">Redirecionando para pagamento...</h2>' +
-        '<p style="font-size:16px;color:#6b7280;margin-bottom:8px;">' + nome + ', você será levado ao Mercado Pago.</p>' +
-        '<p style="font-size:14px;color:#6b7280;margin-bottom:20px;">Número do pedido: <strong style="color:#e11d48;">' + pedidoId + '</strong></p>' +
-        '<button onclick="this.closest(\'div\').parentElement.remove();closeCart();" style="background:#e11d48;color:white;border:none;padding:12px 32px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;width:100%;">Fechar</button>' +
-      '</div>';
-    document.body.appendChild(overlay);
-  }
-
-  // ===== FUNÇÃO PRINCIPAL — INTEGRAÇÃO MERCADO PAGO =====
-  async function finalizarPedido() {
-    var nome = document.getElementById('customerName').value.trim();
-    var email = document.getElementById('customerEmail').value.trim();
-    var telefone = document.getElementById('customerPhone').value.trim();
-
-    if (!nome || !email || !telefone) {
-      alert('Por favor, preencha seu nome, e-mail e WhatsApp para finalizar o pedido.');
-      return;
-    }
-    if (cart.length === 0) {
-      alert('Seu carrinho está vazio. Adicione produtos antes de finalizar.');
-      return;
-    }
-
-    var pedidoId = gerarPedidoId();
-    var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
-
-    var pedido = {
-      pedidoId: pedidoId,
-      cliente: { nome: nome, email: email, telefone: telefone },
-      itens: cart.map(function(item) {
-        return { nome: item.name, preco: item.price, quantidade: item.qty };
-      }),
-      total: total,
-      data: new Date().toISOString(),
-      whatsapp_business_id: WHATSAPP_PHONE_ID,
-      store_email: STORE_EMAIL
-    };
-
-    checkoutBtn.textContent = 'Gerando pagamento...';
-    checkoutBtn.disabled = true;
-
-    try {
-      // 1. Criar preferência no Mercado Pago via backend
-      var resPref = await fetch(NETLIFY_FUNCTIONS_URL + '/create-preference', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pedido)
-      });
-
-      var prefData = await resPref.json();
-
-      if (prefData.initPoint) {
-        // 2. Salvar dados do pedido no localStorage para recuperar após retorno
-        localStorage.setItem('ultimoPedido', JSON.stringify({
-          pedidoId: pedidoId,
-          cliente: pedido.cliente,
-          itens: pedido.itens,
-          total: total,
-          data: pedido.data
-        }));
-
-        // 3. Redirecionar para o Mercado Pago
-        window.location.href = prefData.initPoint;
-      } else {
-        throw new Error('Não foi possível criar o pagamento: ' + JSON.stringify(prefData));
+    function changeQty(productName, delta) {
+      const item = cart.find(i => i.name === productName);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          removeFromCart(productName);
+        } else {
+          updateCart();
+        }
       }
-    } catch (error) {
-      console.error('Erro:', error);
-      alert('Erro ao processar pagamento. Você será direcionado para o WhatsApp para finalizar manualmente.');
-      abrirWhatsAppCheckout();
+    }
+    function updateCart() {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartCount.textContent = totalItems;
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="cart-empty">Seu carrinho está vazio.</p>';
+      } else {
+        cartItems.innerHTML = cart.map(item =>
+          '<div class="cart-item">' +
+            '<div class="cart-item__info">' +
+              '<h4 class="cart-item__name">' + item.name + '</h4>' +
+              '<p class="cart-item__price">R$ ' + item.price.toLocaleString('pt-BR') + ',00</p>' +
+            '</div>' +
+            '<div class="cart-item__controls">' +
+              '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', -1)">−</button>' +
+              '<span class="qty-value">' + item.qty + '</span>' +
+              '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', 1)">+</button>' +
+              '<button class="cart-item__remove" onclick="removeFromCart(\'' + item.name + '\')">🗑</button>' +
+            '</div>' +
+          '</div>'
+        ).join('');
+      }
+      var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
+      cartTotal.textContent = 'R$ ' + total.toLocaleString('pt-BR') + ',00';
     }
 
-    checkoutBtn.textContent = 'Finalizar Pedido';
-    checkoutBtn.disabled = false;
-  }
+    // ===== GERAR ID DO PEDIDO =====
+    function gerarPedidoId() {
+      var now = new Date();
+      var timestamp = now.getTime().toString(36).toUpperCase();
+      var random = Math.random().toString(36).substring(2, 6).toUpperCase();
+      return 'SPS-' + timestamp + '-' + random;
+    }
 
-  // ===== EVENT LISTENERS =====
-  floatingCart.addEventListener('click', openCart);
-  cartClose.addEventListener('click', closeCart);
-  cartOverlay.addEventListener('click', closeCart);
-  checkoutBtn.addEventListener('click', finalizarPedido);
+    // ===== INICIALIZAR SDK MERCADO PAGO =====
+    const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
 
-  // ===== BOTÕES "ADICIONAR" DO CATÁLOGO =====
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.product-card .btn--small').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        var card = this.closest('.product-card');
-        var productName = card.querySelector('.product-card__title').textContent.trim();
-        addToCart(productName);
+    // ===== TELA DE SUCESSO =====
+    function mostrarSucesso(pedidoId, nome) {
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+      overlay.innerHTML =
+        '<div style="background:white;border-radius:16px;padding:40px;max-width:440px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">' +
+          '<div style="font-size:56px;margin-bottom:16px;">✅</div>' +
+          '<h2 style="font-size:24px;font-weight:800;margin-bottom:12px;color:#0f0f14;">Pagamento Aprovado!</h2>' +
+          '<p style="font-size:16px;color:#6b7280;margin-bottom:8px;">' + nome + ', seu pedido foi confirmado com sucesso.</p>' +
+          '<p style="font-size:14px;color:#6b7280;margin-bottom:20px;">Número do pedido: <strong style="color:#e11d48;">' + pedidoId + '</strong></p>' +
+          '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px;margin-bottom:20px;">' +
+            '<p style="font-size:14px;color:#15803d;font-weight:600;">📦 Pedido liberado para envio</p>' +
+            '<p style="font-size:14px;color:#15803d;font-weight:600;">📱 Rastreio será enviado por WhatsApp</p>' +
+            '<p style="font-size:14px;color:#15803d;font-weight:600;">📧 E-mail de confirmação enviado</p>' +
+          '</div>' +
+          '<button onclick="this.closest(\'div\').parentElement.remove();closeCart();" style="background:#e11d48;color:white;border:none;padding:12px 32px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;width:100%;">Continuar</button>' +
+        '</div>';
+      document.body.appendChild(overlay);
+    }
+
+    // ===== FALLBACK WHATSAPP =====
+    function abrirWhatsAppCheckout() {
+      var lista = cart.map(function(i) {
+        return '• ' + i.name + ' x' + i.qty + ' — R$ ' + (i.price * i.qty).toLocaleString('pt-BR') + ',00';
+      }).join('%0A');
+      var totalVal = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
+      var nome = document.getElementById('customerName').value.trim();
+      var email = document.getElementById('customerEmail').value.trim();
+      var tel = document.getElementById('customerPhone').value.trim();
+      var msg = 'Olá! Vim pelo site e quero finalizar meu pedido:%0A%0A' +
+        'Nome: ' + nome + '%0A' +
+        'E-mail: ' + email + '%0A' +
+        'WhatsApp: ' + tel + '%0A%0A' +
+        lista + '%0A%0A*Total: R$ ' + totalVal.toLocaleString('pt-BR') + ',00*';
+      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
+    }
+
+    // ===== VARIÁVEL GLOBAL DO PEDIDO =====
+    var pedidoIdGlobal = null;
+
+    // ===== FUNÇÃO PRINCIPAL — CHECKOUT PRO VIA SDK =====
+    async function abrirPagamento() {
+      var nome = document.getElementById('customerName').value.trim();
+      var email = document.getElementById('customerEmail').value.trim();
+      var telefone = document.getElementById('customerPhone').value.trim();
+
+      if (!nome || !email || !telefone) {
+        alert('Por favor, preencha seu nome, e-mail e WhatsApp para finalizar o pedido.');
+        return;
+      }
+      if (cart.length === 0) {
+        alert('Seu carrinho está vazio. Adicione produtos antes de finalizar.');
+        return;
+      }
+
+      pedidoIdGlobal = gerarPedidoId();
+      var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
+
+      checkoutBtn.textContent = 'Iniciando pagamento...';
+      checkoutBtn.disabled = true;
+
+      try {
+        // Cria o Checkout Pro que abre sobre a landing page (sem redirecionar para fora)
+        mp.checkout({
+          preference: {
+            items: cart.map(function(item) {
+              return {
+                id: item.name.replace(/\s+/g, '-').toLowerCase(),
+                title: item.name,
+                description: 'Produto estético original — Skincare Pro Store',
+                quantity: item.qty,
+                unit_price: item.price,
+                currency_id: 'BRL'
+              };
+            }),
+            payer: {
+              name: nome,
+              email: email,
+              phone: { number: telefone }
+            },
+            external_reference: pedidoIdGlobal,
+            statement_descriptor: 'SKINCARE PRO STORE',
+            back_urls: {
+              success: window.location.origin + window.location.pathname + '?status=success',
+              pending: window.location.origin + window.location.pathname + '?status=pending',
+              failure: window.location.origin + window.location.pathname + '?status=failure'
+            },
+            auto_return: 'approved'
+          },
+          auto_open: true
+        });
+
+        // Após 3 segundos, limpa o carrinho e mostra tela de sucesso
+        setTimeout(function() {
+          cart.length = 0;
+          updateCart();
+          document.getElementById('customerName').value = '';
+          document.getElementById('customerEmail').value = '';
+          document.getElementById('customerPhone').value = '';
+          checkoutBtn.textContent = 'Pagar com Mercado Pago';
+          checkoutBtn.disabled = false;
+          closeCart();
+          mostrarSucesso(pedidoIdGlobal, nome);
+        }, 3000);
+
+      } catch (error) {
+        console.error('Erro MP:', error);
+        alert('Erro ao iniciar pagamento. Você será direcionado para o WhatsApp.');
+        abrirWhatsAppCheckout();
+        checkoutBtn.textContent = 'Pagar com Mercado Pago';
+        checkoutBtn.disabled = false;
+      }
+    }
+
+    // ===== VERIFICAR STATUS DE RETORNO DO MERCADO PAGO =====
+    function verificarRetornoMP() {
+      var params = new URLSearchParams(window.location.search);
+      var status = params.get('status');
+      if (status === 'success') {
+        mostrarSucesso(pedidoIdGlobal || 'SPS-REDIRECT', 'Cliente');
+      } else if (status === 'pending') {
+        alert('Seu pagamento está pendente. Assim que for confirmado, você receberá o rastreio.');
+      } else if (status === 'failure') {
+        alert('O pagamento não foi aprovado. Tente novamente.');
+      }
+      if (status) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    floatingCart.addEventListener('click', openCart);
+    cartClose.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+    checkoutBtn.addEventListener('click', abrirPagamento);
+
+    // ===== BOTÕES "ADICIONAR" DO CATÁLOGO =====
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.product-card .btn--small').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          var card = this.closest('.product-card');
+          var productName = card.querySelector('.product-card__title').textContent.trim();
+          addToCart(productName);
+        });
+      });
+      verificarRetornoMP();
+    });
+
+    // ===== FILTROS DO CATÁLOGO =====
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('filter-btn--active'); });
+        this.classList.add('filter-btn--active');
+        var filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.product-card').forEach(function(card) {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
       });
     });
-  });
 
-  // ===== FILTROS DO CATÁLOGO =====
-  document.querySelectorAll('.filter-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('filter-btn--active'); });
-      this.classList.add('filter-btn--active');
-      var filter = this.getAttribute('data-filter');
-      document.querySelectorAll('.product-card').forEach(function(card) {
-        if (filter === 'all' || card.getAttribute('data-category') === filter) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
+    // ===== SCROLL PROGRESS BAR =====
+    window.addEventListener('scroll', function() {
+      var scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('scrollProgress').style.width = scrolled + '%';
+    });
+
+    // ===== ANIMAÇÃO FADE-IN =====
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in--visible');
         }
       });
-    });
-  });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
 
-  // ===== SCROLL PROGRESS BAR =====
-  window.addEventListener('scroll', function() {
-    var scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-    document.getElementById('scrollProgress').style.width = scrolled + '%';
-  });
-
-  // ===== ANIMAÇÃO FADE-IN =====
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in--visible');
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
-
-  // ===== EXPOR FUNÇÕES GLOBALMENTE =====
-  window.addToCart = addToCart;
-  window.changeQty = changeQty;
-  window.removeFromCart = removeFromCart;
-</script>
+    // ===== EXPOR FUNÇÕES GLOBALMENTE =====
+    window.addToCart = addToCart;
+    window.changeQty = changeQty;
+    window.removeFromCart = removeFromCart;
+  </script>
 </body>
 </html>
