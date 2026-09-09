@@ -14,48 +14,30 @@ exports.handler = async (event) => {
     'Content-Type': 'application/json'
   };
 
-  // Responde ao preflight CORS
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers, body: '' };
   }
 
-  // Rejeita métodos que não sejam POST
   if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
   try {
     const body = JSON.parse(event.body);
 
-    // Validação básica
     if (!body.items || !Array.isArray(body.items) || body.items.length === 0) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: 'Items array is required' })
-      };
+      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Items array is required' }) };
     }
 
-    // Verifica se o token está configurado
     if (!MP_ACCESS_TOKEN) {
       console.error('MP_ACCESS_TOKEN não configurado no ambiente do Netlify');
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: 'MP_ACCESS_TOKEN não configurado' })
-      };
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'MP_ACCESS_TOKEN não configurado' }) };
     }
 
-    // Sanitiza statement_descriptor (máx 16 caracteres)
     if (body.statement_descriptor && body.statement_descriptor.length > 16) {
       body.statement_descriptor = body.statement_descriptor.replace(/\s+/g, '').substring(0, 16);
     }
 
-    // Chama a API do Mercado Pago para criar a preferência
     const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
       headers: {
@@ -69,14 +51,9 @@ exports.handler = async (event) => {
 
     if (!mpResponse.ok) {
       console.error('Erro API MP:', mpData);
-      return {
-        statusCode: mpResponse.status,
-        headers,
-        body: JSON.stringify({ error: mpData.message || 'Erro ao criar preferência' })
-      };
+      return { statusCode: mpResponse.status, headers, body: JSON.stringify({ error: mpData.message || 'Erro ao criar preferência' }) };
     }
 
-    // Retorna o preferenceId e init_point para o frontend
     return {
       statusCode: 200,
       headers,
@@ -85,14 +62,9 @@ exports.handler = async (event) => {
         initPoint: mpData.init_point
       })
     };
-
   } catch (error) {
     console.error('Erro na function:', error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: error.message })
-    };
+    return { statusCode: 500, headers, body: JSON.stringify({ error: error.message }) };
   }
 };
       
