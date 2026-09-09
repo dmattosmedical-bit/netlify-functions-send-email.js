@@ -681,12 +681,12 @@
         var brickContainer = document.getElementById('walletBrick_container');
         brickContainer.innerHTML = '';
         checkoutBtn.style.display = 'none';
-        mp.bricks().create('wallet', 'walletBrick_container', {
-          initialization: {
-            preferenceId: data.preferenceId,
-            redirectMode: 'modal'
-          }
-        });
+        brickController = await mp.bricks().create('wallet', 'walletBrick_container', {
+  initialization: {
+    preferenceId: data.preferenceId,
+    redirectMode: 'modal'
+  }
+});
         checkoutBtn.textContent = 'Aguardando pagamento...';
         checkoutBtn.disabled = false;
       } catch (error) {
