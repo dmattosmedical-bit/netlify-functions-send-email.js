@@ -1,13 +1,12 @@
 [build]
   functions = "netlify/functions"
 
-[context.production.environment]
-  NODE_VERSION = "18"
-
-[context.deploy-preview.environment]
-  NODE_VERSION = "18"
+[[redirects]]
+  from = "/webhook"
+  to = "/.netlify/functions/webhook"
+  status = 200
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  from = "/get-order"
+  to = "/.netlify/functions/get-order"
   status = 200
