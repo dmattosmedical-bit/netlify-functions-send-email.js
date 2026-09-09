@@ -153,7 +153,9 @@
     .cart-customer-fields input:focus { outline: none; border-color: var(--primary); }<br/>
     .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 18px; font-weight: 700; }<br/>
     .cart-total-value { color: var(--primary); font-size: 22px; }<br/>
-    .wallet-brick-container { margin-top: 16px; }<br/>
+    .wallet-brick-container { margin-top: 16px; min-height: 48px; }<br/>
+    .brick-loading { text-align: center; padding: 20px; color: var(--gray); font-size: 14px; }<br/>
+    .brick-error { text-align: center; padding: 16px; color: var(--primary); font-size: 14px; background: rgba(225,29,72,0.05); border-radius: 8px; margin-top: 8px; }<br/>
     @media (max-width: 1024px) {<br/>
       .problem__grid, .solution__pillars, .guarantee__items, .social-proof__grid, .catalog__grid { grid-template-columns: repeat(2, 1fr); }<br/>
       .solution__intro, .urgency__content { grid-template-columns: 1fr; }<br/>
@@ -182,6 +184,7 @@
   <a href="https://wa.me/5531984815086?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida." class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.255-.463-1.449-.572-.194-.108-.337-.149-.479.149-.143.297-.555.572-.679.679-.124.108-.269.149-.466.049-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.347-1.475-.497-2.02-.149-.546-.298-.546-.446-.546h-.466c-.198 0-.52.074-.793.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.485.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </a>
+
   <!-- HERO -->
   <header class="hero" id="hero">
     <div class="hero__background"><div class="hero__gradient"></div></div>
@@ -201,6 +204,7 @@
       </div>
     </div>
   </header>
+
   <!-- PROBLEM -->
   <section class="section" id="problem">
     <div class="container">
@@ -224,6 +228,7 @@
       </div>
     </div>
   </section>
+
   <!-- SOLUTION -->
   <section class="section section--dark" id="solution">
     <div class="container">
@@ -235,6 +240,7 @@
       </div>
     </div>
   </section>
+
   <!-- VALUE STACK -->
   <section class="section" id="value-stack">
     <div class="container container--narrow">
@@ -292,6 +298,7 @@
       </div>
     </div>
   </section>
+
   <!-- CATALOG -->
   <section class="section" id="catalog">
     <div class="container">
@@ -363,6 +370,7 @@
       </div>
     </div>
   </section>
+
   <!-- SOCIAL PROOF -->
   <section class="section" id="social-proof">
     <div class="container">
@@ -405,6 +413,7 @@
       </div>
     </div>
   </section>
+
   <!-- URGENCY -->
   <section class="section" id="urgency">
     <div class="container">
@@ -426,6 +435,7 @@
       </div>
     </div>
   </section>
+
   <!-- GUARANTEE -->
   <section class="section section--dark" id="guarantee">
     <div class="container">
@@ -437,6 +447,7 @@
       </div>
     </div>
   </section>
+
   <!-- FAQ -->
   <section class="section" id="faq">
     <div class="container">
@@ -445,35 +456,36 @@
       <div class="faq__list">
         <details class="faq__item">
           <summary class="faq__question">Os produtos são realmente originais? <span>+</span></summary>
-          <p class="faq__answer">Sim. Todos os produtos são adquiridos diretamente dos laboratórios fabricantes ou distribuidores oficiais. Cada pedido acompanha nota fiscal com a procedência documentada. Se você tiver qualquer dúvida sobre a autenticidade, entre em contato pelo WhatsApp que enviamos o comprovante de aquisição.</p>
+          <p class="faq__answer">Sim. Todos os produtos são adquiridos diretamente dos laboratórios fabricantes ou distribuidores oficiais. Cada pedido acompanha nota fiscal com a procedência documentada.</p>
         </details>
         <details class="faq__item">
           <summary class="faq__question">Qual é o prazo de entrega? <span>+</span></summary>
-          <p class="faq__answer">A média é de 2 a 3 dias úteis para todo o Brasil. Pedidos confirmados até as 14h são despachados no mesmo dia. Você recebe o código de rastreio assim que o pedido é postado.</p>
+          <p class="faq__answer">A média é de 2 a 3 dias úteis para todo o Brasil. Pedidos confirmados até as 14h são despachados no mesmo dia.</p>
         </details>
         <details class="faq__item">
           <summary class="faq__question">Como funciona o pagamento? <span>+</span></summary>
-          <p class="faq__answer">O pagamento é processado pelo Mercado Pago, com segurança total. Você pode pagar com cartão de crédito (em até 12x), PIX ou boleto. Seus dados financeiros nunca passam pelo nosso site — tudo é tratado pelo Mercado Pago.</p>
+          <p class="faq__answer">O pagamento é processado pelo Mercado Pago, com segurança total. Você pode pagar com cartão de crédito (em até 12x), PIX ou boleto.</p>
         </details>
         <details class="faq__item">
           <summary class="faq__question">Vocês emitem nota fiscal? <span>+</span></summary>
-          <p class="faq__answer">Sim. Todos os pedidos são acompanhados de nota fiscal eletrônica. Isso garante a procedência do produto e permite que sua clínica faça a dedução correta nos impostos.</p>
+          <p class="faq__answer">Sim. Todos os pedidos são acompanhados de nota fiscal eletrônica.</p>
         </details>
         <details class="faq__item">
           <summary class="faq__question">E se o produto chegar com algum problema? <span>+</span></summary>
-          <p class="faq__answer">Você tem 7 dias para solicitar troca ou reembolso integral. Se o produto chegar danificado, com embalagem violada ou fora da validade, enviamos um novo sem custo adicional ou devolvemos 100% do valor. Sem burocracia.</p>
+          <p class="faq__answer">Você tem 7 dias para solicitar troca ou reembolso integral.</p>
         </details>
         <details class="faq__item">
           <summary class="faq__question">Posso comprar mais de um produto no mesmo pedido? <span>+</span></summary>
-          <p class="faq__answer">Sim! Esse é exatamente o objetivo. Adicione quantos produtos quiser no carrinho e finalize em um único pagamento. Uma nota, um frete, um rastreio. Muito mais simples que gerenciar 7 fornecedores diferentes.</p>
+          <p class="faq__answer">Sim! Adicione quantos produtos quiser no carrinho e finalize em um único pagamento.</p>
         </details>
         <details class="faq__item">
           <summary class="faq__question">Preciso de comprovação profissional para comprar? <span>+</span></summary>
-          <p class="faq__answer">Sim. Por se tratarem de produtos de uso profissional, solicitamos comprovação de registro profissional (CRM, CRC, CRO, etc.) no primeiro pedido. Após a validação, seus dados ficam cadastrados e os próximos pedidos são liberados automaticamente.</p>
+          <p class="faq__answer">Sim. Solicitamos comprovação de registro profissional (CRM, CRC, CRO, etc.) no primeiro pedido.</p>
         </details>
       </div>
     </div>
   </section>
+
   <!-- FINAL CTA -->
   <section class="section section--dark" id="final-cta">
     <div class="container" style="text-align: center;">
@@ -481,6 +493,7 @@
       <a href="#catalog" class="btn btn--primary btn--large btn--pulse">Acessar catálogo completo agora</a>
     </div>
   </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
@@ -492,6 +505,7 @@
       <div class="footer__bottom"><p>&copy; 2026 Skincare Pro Store. Todos os direitos reservados.</p></div>
     </div>
   </footer>
+
   <!-- Cart Sidebar -->
   <div class="cart-overlay" id="cartOverlay"></div>
   <aside class="cart-sidebar" id="cartSidebar">
@@ -516,17 +530,22 @@
       <button class="btn btn--primary btn--large btn--block" id="checkoutBtn">Pagar com Mercado Pago</button>
     </div>
   </aside>
+
   <script>
-    // 
     // SKINCARE PRO STORE - INTEGRAÇÃO MERCADO PAGO (CORRIGIDA)
-    // 
     const MP_PUBLIC_KEY = 'APP_USR-2ec19537-ade1-47cb-a5d3-477b4ae66b7d';
     const WHATSAPP_NUMBER = '5531984815086';
     const cart = [];
     const precos = {
-      'Dysport': 1600, 'Sculptra': 1600, 'LineBody Hard': 1600,<br/>
-      'LineBody Soft': 1600, 'Nabota': 1600, 'Momm': 1600, 'Botox Allergan': 1600
+      'Dysport': 1600,<br/>
+      'Sculptra': 1600,<br/>
+      'LineBody Hard': 1600,<br/>
+      'LineBody Soft': 1600,<br/>
+      'Nabota': 1600,<br/>
+      'Momm': 1600,<br/>
+      'Botox Allergan': 1600
     };
+
     const cartSidebar = document.getElementById('cartSidebar');
     const cartOverlay = document.getElementById('cartOverlay');
     const cartItems = document.getElementById('cartItems');
@@ -541,29 +560,43 @@
       cartSidebar.classList.add('cart-sidebar--open');
       cartOverlay.classList.add('cart-overlay--active');
     }
+
     function closeCart() {
       cartSidebar.classList.remove('cart-sidebar--open');
       cartOverlay.classList.remove('cart-overlay--active');
     }
+
     function addToCart(productName) {
       const existing = cart.find(item => item.name === productName);
-      if (existing) { existing.qty += 1; }
-      else { cart.push({ name: productName, price: precos[productName] || 1600, qty: 1 }); }
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ name: productName, price: precos[productName] || 1600, qty: 1 });
+      }
       updateCart();
       openCart();
     }
+
     function removeFromCart(productName) {
       const index = cart.findIndex(item => item.name === productName);
-      if (index !== -1) { cart.splice(index, 1); updateCart(); }
+      if (index !== -1) {
+        cart.splice(index, 1);
+        updateCart();
+      }
     }
+
     function changeQty(productName, delta) {
       const item = cart.find(i => i.name === productName);
       if (item) {
         item.qty += delta;
-        if (item.qty <= 0) { removeFromCart(productName); }
-        else { updateCart(); }
+        if (item.qty <= 0) {
+          removeFromCart(productName);
+        } else {
+          updateCart();
+        }
       }
     }
+
     function updateCart() {
       const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
       cartCount.textContent = totalItems;
@@ -588,12 +621,14 @@
       var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
       cartTotal.textContent = 'R$ ' + total.toLocaleString('pt-BR') + ',00';
     }
+
     function gerarPedidoId() {
       var now = new Date();
       var timestamp = now.getTime().toString(36).toUpperCase();
       var random = Math.random().toString(36).substring(2, 6).toUpperCase();
       return 'SPS-' + timestamp + '-' + random;
     }
+
     function mostrarSucesso(pedidoId, nome) {
       var overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -607,6 +642,7 @@
         '</div>';
       document.body.appendChild(overlay);
     }
+
     function abrirWhatsAppCheckout() {
       var lista = cart.map(function(i) {
         return '• ' + i.name + ' x' + i.qty + ' — R$ ' + (i.price * i.qty).toLocaleString('pt-BR') + ',00';
@@ -616,7 +652,9 @@
       var email = document.getElementById('customerEmail').value.trim();
       var tel = document.getElementById('customerPhone').value.trim();
       var msg = 'Olá! Vim pelo site e quero finalizar meu pedido:%0A%0A' +<br/>
-        'Nome: ' + nome + '%0A' + 'E-mail: ' + email + '%0A' + 'WhatsApp: ' + tel + '%0A%0A' +<br/>
+        'Nome: ' + nome + '%0A' +<br/>
+        'E-mail: ' + email + '%0A' +<br/>
+        'WhatsApp: ' + tel + '%0A%0A' +<br/>
         lista + '%0A%0A*Total: R$ ' + totalVal.toLocaleString('pt-BR') + ',00*';<br/>
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
     }
@@ -630,7 +668,6 @@
         alert('Por favor, preencha seu nome, e-mail e WhatsApp para finalizar o pedido.');
         return;
       }
-
       if (cart.length === 0) {
         alert('Seu carrinho está vazio. Adicione produtos antes de finalizar.');
         return;
@@ -640,7 +677,11 @@
       checkoutBtn.textContent = 'Iniciando pagamento...';
       checkoutBtn.disabled = true;
 
+      var brickContainer = document.getElementById('walletBrick_container');
+      brickContainer.innerHTML = '<div class="brick-loading">Carregando formulário de pagamento...</div>';
+
       try {
+        console.log('[MP] Enviando preferência para o backend...');
         var response = await fetch('/.netlify/functions/create-preference', {
           method: 'POST',<br/>
           headers: { 'Content-Type': 'application/json' },<br/>
@@ -655,7 +696,11 @@
                 currency_id: 'BRL'
               };
             }),
-            payer: { name: nome, email: email, phone: { number: telefone } },<br/>
+            payer: {<br/>
+              name: nome,<br/>
+              email: email,<br/>
+              phone: { number: telefone }
+            },
             external_reference: pedidoId,<br/>
             statement_descriptor: 'SKINCAREPROSTORE',<br/>
             back_urls: {<br/>
@@ -668,49 +713,56 @@
           })
         });
 
+        console.log('[MP] Resposta do backend:', response.status);
+
+        if (!response.ok) {
+          throw new Error('Backend retornou status ' + response.status + '. Verifique se a função serverless existe.');
+        }
+
         var data = await response.json();
+        console.log('[MP] Dados recebidos:', data);
 
         if (!data.preferenceId) {
-          throw new Error('Resposta inválida da API: ' + JSON.stringify(data));
+          throw new Error('Resposta inválida: preferenceId não encontrado.');
         }
 
         if (brickController) {
-          await brickController.unmount();
+          try { await brickController.unmount(); } catch(e) { console.log('[MP] Brick anterior removido'); }
           brickController = null;
         }
-
-        var brickContainer = document.getElementById('walletBrick_container');
         brickContainer.innerHTML = '';
         checkoutBtn.style.display = 'none';
-
         openCart();
-        await new Promise(resolve => setTimeout(resolve, 100));
 
+        await new Promise(resolve => setTimeout(resolve, 150));
+
+        console.log('[MP] Criando Wallet Brick...');
         brickController = await mp.bricks().create('wallet', 'walletBrick_container', {
           initialization: {<br/>
             preferenceId: data.preferenceId,<br/>
             redirectMode: 'modal'
           }
         });
+        console.log('[MP] Wallet Brick criado com sucesso!');
 
         checkoutBtn.textContent = 'Aguardando pagamento...';
         checkoutBtn.disabled = false;
 
       } catch (error) {
-        console.error('Erro:', error);
+        console.error('[MP] Erro ao criar pagamento:', error);
+
         if (brickController) {
-          await brickController.unmount();
+          try { await brickController.unmount(); } catch(e) {}
           brickController = null;
         }
-        var brickContainer = document.getElementById('walletBrick_container');
-        brickContainer.innerHTML = '';
+        brickContainer.innerHTML = '<div class="brick-error">Não foi possível carregar o pagamento automático. Você será direcionado para o WhatsApp para finalizar manualmente.</div>';
         checkoutBtn.style.display = '';
         checkoutBtn.textContent = 'Pagar com Mercado Pago';
         checkoutBtn.disabled = false;
-        alert('Erro ao iniciar pagamento: ' + error.message + '
 
-Você será direcionado para o WhatsApp.');
-        abrirWhatsAppCheckout();
+        setTimeout(function() {
+          abrirWhatsAppCheckout();
+        }, 2000);
       }
     }
 
@@ -771,7 +823,6 @@ Você será direcionado para o WhatsApp.');
         if (entry.isIntersecting) { entry.target.classList.add('fade-in--visible'); }
       });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
 
     window.addToCart = addToCart;
