@@ -125,6 +125,8 @@
     .faq__item { background: white; border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); }
     .faq__question { padding: 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
     .faq__question::-webkit-details-marker { display: none; }
+    .faq__question span { transition: transform 0.3s ease; font-size: 24px; color: var(--primary); font-weight: 300; }
+    details[open] .faq__question span { transform: rotate(45deg); }
     .faq__answer { padding: 0 20px 20px; color: var(--gray); font-size: 15px; }
     .footer { background: var(--dark); color: rgba(255,255,255,0.7); padding: 60px 0 24px; }
     .footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
@@ -180,6 +182,8 @@
   <a href="https://wa.me/5531984815086?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida." class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.255-.463-1.449-.572-.194-.108-.337-.149-.479.149-.143.297-.555.572-.679.679-.124.108-.269.149-.466.049-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.347-1.475-.497-2.02-.149-.546-.298-.546-.446-.546h-.466c-.198 0-.52.074-.793.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.485.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </a>
+
+  <!-- HERO -->
   <header class="hero" id="hero">
     <div class="hero__background"><div class="hero__gradient"></div></div>
     <div class="container hero__content">
@@ -198,6 +202,8 @@
       </div>
     </div>
   </header>
+
+  <!-- PROBLEM -->
   <section class="section" id="problem">
     <div class="container">
       <h2 class="section__title">Se você é profissional de estética, você já viveu isso:</h2>
@@ -220,6 +226,8 @@
       </div>
     </div>
   </section>
+
+  <!-- SOLUTION -->
   <section class="section section--dark" id="solution">
     <div class="container">
       <h2 class="section__title section__title--light">A solução é simples: um e-commerce. Todos os produtos. Preço real. Entrega rápida.</h2>
@@ -230,15 +238,75 @@
       </div>
     </div>
   </section>
+
+  <!-- VALUE STACK -->
+  <section class="section" id="value-stack">
+    <div class="container container--narrow">
+      <h2 class="section__title">O que você recebe ao comprar da Skincare Pro Store</h2>
+      <p class="section__subtitle">Mais do que produtos — uma estrutura completa para sua clínica não parar.</p>
+      <div class="value-stack__list">
+        <div class="value-stack__item">
+          <div class="value-stack__check">✓</div>
+          <div style="flex:1">
+            <h3 class="value-stack__item-title">Produto original de fábrica</h3>
+            <p class="value-stack__item-desc">Dysport, Sculptra, LineBody, Nabota, Momm ou Botox Allergan — direto dos laboratórios.</p>
+          </div>
+          <span class="value-stack__price">R$ 1.600</span>
+        </div>
+        <div class="value-stack__divider"></div>
+        <div class="value-stack__item">
+          <div class="value-stack__check">✓</div>
+          <div style="flex:1">
+            <h3 class="value-stack__item-title">Frete expressa para todo Brasil</h3>
+            <p class="value-stack__item-desc">Entrega em 2 a 3 dias úteis. Seu paciente não desmarca por falta de produto.</p>
+          </div>
+          <span class="value-stack__price value-stack__price--free">Grátis</span>
+        </div>
+        <div class="value-stack__divider"></div>
+        <div class="value-stack__item">
+          <div class="value-stack__check">✓</div>
+          <div style="flex:1">
+            <h3 class="value-stack__item-title">Nota fiscal em todos os pedidos</h3>
+            <p class="value-stack__item-desc">Procedência garantida e documentação completa para sua clínica.</p>
+          </div>
+          <span class="value-stack__price value-stack__price--free">Grátis</span>
+        </div>
+        <div class="value-stack__divider"></div>
+        <div class="value-stack__item">
+          <div class="value-stack__check">✓</div>
+          <div style="flex:1">
+            <h3 class="value-stack__item-title">Atendimento direto via WhatsApp</h3>
+            <p class="value-stack__item-desc">Fale direto com quem entende. Sem robô, sem fila de espera, sem "aguarde nosso retorno".</p>
+          </div>
+          <span class="value-stack__price value-stack__price--free">Grátis</span>
+        </div>
+        <div class="value-stack__divider"></div>
+        <div class="value-stack__item">
+          <div class="value-stack__check">✓</div>
+          <div style="flex:1">
+            <h3 class="value-stack__item-title">Garantia de troca ou reembolso em 7 dias</h3>
+            <p class="value-stack__item-desc">Produto chegou com problema? Troca garantida ou seu dinheiro de volta. Sem burocracia.</p>
+          </div>
+          <span class="value-stack__price value-stack__price--free">Grátis</span>
+        </div>
+        <div class="value-stack__total">
+          <p>Valor total do pacote: <span style="text-decoration:line-through;color:var(--gray);">R$ 2.730</span></p>
+          <p style="margin-top:8px;">Você paga a partir de: <span class="value-stack__total-value">R$ 1.600</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG -->
   <section class="section" id="catalog">
     <div class="container">
       <h2 class="section__title">Catálogo Completo — 7 Produtos Originais</h2>
       <p class="section__subtitle">Todos os produtos em estoque, com nota fiscal e entrega expressa.</p>
       <div class="catalog__filters">
-        <button class="filter-btn filter-btn--active" data-filter="all">Todos</button>
-        <button class="filter-btn" data-filter="toxinas">Toxinas</button>
-        <button class="filter-btn" data-filter="preenchedores">Preenchedores</button>
-        <button class="filter-btn" data-filter="bioestimuladores">Bioestimuladores</button>
+        <button type="button" class="filter-btn filter-btn--active" data-filter="all">Todos</button>
+        <button type="button" class="filter-btn" data-filter="toxinas">Toxinas</button>
+        <button type="button" class="filter-btn" data-filter="preenchedores">Preenchedores</button>
+        <button type="button" class="filter-btn" data-filter="bioestimuladores">Bioestimuladores</button>
       </div>
       <div class="catalog__grid">
         <article class="product-card" data-category="toxinas">
@@ -246,7 +314,7 @@
           <div class="product-card__content">
             <h3 class="product-card__title">Dysport</h3>
             <p class="product-card__desc">Toxina botulínica para tratamento de rugas e linhas de expressão.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
         <article class="product-card" data-category="bioestimuladores">
@@ -254,7 +322,7 @@
           <div class="product-card__content">
             <h3 class="product-card__title">Sculptra</h3>
             <p class="product-card__desc">Bioestimulador de colágeno para volume e rejuvenescimento facial.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
         <article class="product-card" data-category="preenchedores">
@@ -262,7 +330,7 @@
           <div class="product-card__content">
             <h3 class="product-card__title">LineBody Hard</h3>
             <p class="product-card__desc">Preenchedor de alta densidade para remodelação corporal e facial.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
         <article class="product-card" data-category="preenchedores">
@@ -270,7 +338,7 @@
           <div class="product-card__content">
             <h3 class="product-card__title">LineBody Soft</h3>
             <p class="product-card__desc">Preenchedor de baixa densidade para áreas delicadas e sutis.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
         <article class="product-card" data-category="toxinas">
@@ -278,7 +346,7 @@
           <div class="product-card__content">
             <h3 class="product-card__title">Nabota</h3>
             <p class="product-card__desc">Toxina botulínica de origem coreana, alta pureza e eficácia.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
         <article class="product-card" data-category="preenchedores">
@@ -286,7 +354,7 @@
           <div class="product-card__content">
             <h3 class="product-card__title">Momm</h3>
             <p class="product-card__desc">Preenchedor corporal e facial com tecnologia avançada de hidratação.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
         <article class="product-card" data-category="toxinas">
@@ -294,12 +362,79 @@
           <div class="product-card__content">
             <h3 class="product-card__title">Botox Allergan</h3>
             <p class="product-card__desc">Toxina botulínica de referência mundial para rugas e linhas de expressão.</p>
-            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button class="btn btn--primary btn--small">Adicionar</button></div>
+            <div class="product-card__footer"><span class="product-card__price">A partir de R$ 1.600</span><button type="button" class="btn btn--primary btn--small">Adicionar</button></div>
           </div>
         </article>
       </div>
     </div>
   </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="section" id="social-proof">
+    <div class="container">
+      <h2 class="section__title">Profissionais que não voltaram a comprar de intermediário</h2>
+      <p class="section__subtitle">Resultados reais de clínicas e profissionais que migraram para a Skincare Pro Store.</p>
+      <div class="social-proof__grid">
+        <article class="testimonial">
+          <div class="testimonial__quote-mark">"</div>
+          <p class="testimonial__text">Antes eu comprava Dysport de um distribuidor que sumia toda semana. Desde que mudei pra Skincare Pro Store, não fiquei sem produto nenhuma vez. Pedido segunda, produto na quarta. <strong>Economizei R$ 400 por frasco.</strong></p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">DR</div>
+            <div>
+              <p class="testimonial__name">Dra. Renata Andrade</p>
+              <p class="testimonial__role">Dentista — BH/MG</p>
+            </div>
+          </div>
+        </article>
+        <article class="testimonial">
+          <div class="testimonial__quote-mark">"</div>
+          <p class="testimonial__text">Comprava Sculptra, LineBody e Nabota de três fornecedores diferentes. Agora faço tudo num carrinho só. <strong>Economizo um dia inteiro de gestão por mês</strong> e o preço é melhor nos três.</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">MC</div>
+            <div>
+              <p class="testimonial__name">Marciele Campos</p>
+              <p class="testimonial__role">Biomédica Esteta — SP</p>
+            </div>
+          </div>
+        </article>
+        <article class="testimonial">
+          <div class="testimonial__quote-mark">"</div>
+          <p class="testimonial__text">Já tinha medo de comprar online por causa de produto falsificado. A nota fiscal e a procedência direta do laboratório me deram segurança. <strong>8 pedidos, 0 problemas.</strong> Não troco mais.</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">FS</div>
+            <div>
+              <p class="testimonial__name">Fernanda Souza</p>
+              <p class="testimonial__role">Fisioterapeuta Dermato — RJ</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- URGENCY -->
+  <section class="section" id="urgency">
+    <div class="container">
+      <div class="urgency__content">
+        <div>
+          <h2 class="section__title" style="text-align:left;">Estoque rotativo. Quando acaba, acaba.</h2>
+          <p style="font-size:18px;color:var(--gray);margin-bottom:16px;">Produtos estéticos originais têm produção limitada. Cada lote que chega é reservado rápido pelas clínicas que já compram conosco.</p>
+          <p style="font-size:16px;color:var(--gray);">Peça hoje e receba em 2 a 3 dias úteis. Se esperar, pode ficar sem produto na próxima semana de pacientes.</p>
+          <a href="#catalog" class="btn btn--primary btn--large btn--pulse" style="margin-top:24px;">Garantir meus produtos agora</a>
+        </div>
+        <div style="text-align:center;">
+          <p style="font-size:14px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Unidades disponíveis este mês</p>
+          <div class="urgency__counter-number">87</div>
+          <div class="urgency__counter-bar">
+            <div class="urgency__counter-bar-fill" style="width: 35%;"></div>
+          </div>
+          <p style="font-size:13px;color:var(--gray);margin-top:8px;">65% já reservados por clientes recorrentes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUARANTEE -->
   <section class="section section--dark" id="guarantee">
     <div class="container">
       <h2 class="section__title section__title--light">Você não tem nada a perder. Nós assumimos todo o risco.</h2>
@@ -310,12 +445,54 @@
       </div>
     </div>
   </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <h2 class="section__title">Perguntas frequentes</h2>
+      <p class="section__subtitle">Tudo que você precisa saber antes de pedir.</p>
+      <div class="faq__list">
+        <details class="faq__item">
+          <summary class="faq__question">Os produtos são realmente originais? <span>+</span></summary>
+          <p class="faq__answer">Sim. Todos os produtos são adquiridos diretamente dos laboratórios fabricantes ou distribuidores oficiais. Cada pedido acompanha nota fiscal com a procedência documentada. Se você tiver qualquer dúvida sobre a autenticidade, entre em contato pelo WhatsApp que enviamos o comprovante de aquisição.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__question">Qual é o prazo de entrega? <span>+</span></summary>
+          <p class="faq__answer">A média é de 2 a 3 dias úteis para todo o Brasil. Pedidos confirmados até as 14h são despachados no mesmo dia. Você recebe o código de rastreio assim que o pedido é postado.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__question">Como funciona o pagamento? <span>+</span></summary>
+          <p class="faq__answer">O pagamento é processado pelo Mercado Pago, com segurança total. Você pode pagar com cartão de crédito (em até 12x), PIX ou boleto. Seus dados financeiros nunca passam pelo nosso site — tudo é tratado pelo Mercado Pago.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__question">Vocês emitem nota fiscal? <span>+</span></summary>
+          <p class="faq__answer">Sim. Todos os pedidos são acompanhados de nota fiscal eletrônica. Isso garante a procedência do produto e permite que sua clínica faça a dedução correta nos impostos.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__question">E se o produto chegar com algum problema? <span>+</span></summary>
+          <p class="faq__answer">Você tem 7 dias para solicitar troca ou reembolso integral. Se o produto chegar danificado, com embalagem violada ou fora da validade, enviamos um novo sem custo adicional ou devolvemos 100% do valor. Sem burocracia.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__question">Posso comprar mais de um produto no mesmo pedido? <span>+</span></summary>
+          <p class="faq__answer">Sim! Esse é exatamente o objetivo. Adicione quantos produtos quiser no carrinho e finalize em um único pagamento. Uma nota, um frete, um rastreio. Muito mais simples que gerenciar 7 fornecedores diferentes.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__question">Preciso de comprovação profissional para comprar? <span>+</span></summary>
+          <p class="faq__answer">Sim. Por se tratarem de produtos de uso profissional, solicitamos comprovação de registro profissional (CRM, CRC, CRO, etc.) no primeiro pedido. Após a validação, seus dados ficam cadastrados e os próximos pedidos são liberados automaticamente.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
   <section class="section section--dark" id="final-cta">
     <div class="container" style="text-align: center;">
       <h2 class="section__title section__title--light">7 produtos originais. Entrega expressa. Preço de fábrica.</h2>
       <a href="#catalog" class="btn btn--primary btn--large btn--pulse">Acessar catálogo completo agora</a>
     </div>
   </section>
+
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <div class="footer__grid">
@@ -326,6 +503,7 @@
       <div class="footer__bottom"><p>&copy; 2026 Skincare Pro Store. Todos os direitos reservados.</p></div>
     </div>
   </footer>
+
   <!-- Cart Sidebar -->
   <div class="cart-overlay" id="cartOverlay"></div>
   <aside class="cart-sidebar" id="cartSidebar">
@@ -346,16 +524,16 @@
         <span>Total:</span>
         <span class="cart-total-value" id="cartTotal">R$ 0,00</span>
       </div>
-      <!-- Container onde o Wallet Brick do Mercado Pago será renderizado -->
       <div class="wallet-brick-container" id="walletBrick_container"></div>
       <button class="btn btn--primary btn--large btn--block" id="checkoutBtn">Pagar com Mercado Pago</button>
     </div>
   </aside>
+
   <script>
     // =================================================================
     // SKINCARE PRO STORE - INTEGRAÇÃO MERCADO PAGO (CORRIGIDA)
     // =================================================================
-    const MP_PUBLIC_KEY = APP_USR-b24a5d58-05aa-4cc3-a68b-c05271d985d7
+    const MP_PUBLIC_KEY = 'APP_USR-b24a5d58-05aa-4cc3-a68b-c05271d985d7';
     const WHATSAPP_NUMBER = '5531984815086';
     const cart = [];
     const precos = {
@@ -369,8 +547,8 @@
     const cartCount = document.getElementById('cartCount');
     const checkoutBtn = document.getElementById('checkoutBtn');
     const floatingCart = document.getElementById('floatingCart');
-    // Inicializa SDK do Mercado Pago
     const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
+
     function openCart() {
       cartSidebar.classList.add('cart-sidebar--open');
       cartOverlay.classList.add('cart-overlay--active');
@@ -454,7 +632,6 @@
         lista + '%0A%0A*Total: R$ ' + totalVal.toLocaleString('pt-BR') + ',00*';
       window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
     }
-    // FUNÇÃO PRINCIPAL DE CHECKOUT
     async function abrirPagamento() {
       var nome = document.getElementById('customerName').value.trim();
       var email = document.getElementById('customerEmail').value.trim();
@@ -468,11 +645,9 @@
         return;
       }
       var pedidoId = gerarPedidoId();
-      var total = cart.reduce(function(sum, item) { return sum + (item.price * item.qty); }, 0);
       checkoutBtn.textContent = 'Iniciando pagamento...';
       checkoutBtn.disabled = true;
       try {
-        // 1. Chama a serverless function (NÃO chama a API do MP diretamente)
         var response = await fetch('/.netlify/functions/create-preference', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -489,7 +664,6 @@
             }),
             payer: { name: nome, email: email, phone: { number: telefone } },
             external_reference: pedidoId,
-            // CORRIGIDO: 16 caracteres (limite do Mercado Pago)
             statement_descriptor: 'SKINCAREPROSTORE',
             back_urls: {
               success: window.location.origin + '/?status=success',
@@ -504,12 +678,9 @@
         if (!data.preferenceId) {
           throw new Error('Resposta inválida da API: ' + JSON.stringify(data));
         }
-        // 2. Limpa o container do Wallet Brick (se já foi renderizado antes)
         var brickContainer = document.getElementById('walletBrick_container');
         brickContainer.innerHTML = '';
-        // CORRIGIDO: Esconde o botão original para não conflitar com o Wallet Brick
         checkoutBtn.style.display = 'none';
-        // 3. Renderiza o Wallet Brick com redirectMode modal (abre SOBRE a página)
         mp.bricks().create('wallet', 'walletBrick_container', {
           initialization: {
             preferenceId: data.preferenceId,
@@ -520,7 +691,6 @@
         checkoutBtn.disabled = false;
       } catch (error) {
         console.error('Erro:', error);
-        // CORRIGIDO: Restaura o botão em caso de erro
         checkoutBtn.style.display = '';
         checkoutBtn.textContent = 'Pagar com Mercado Pago';
         checkoutBtn.disabled = false;
@@ -528,7 +698,6 @@
         abrirWhatsAppCheckout();
       }
     }
-    // Verifica status de retorno do Mercado Pago
     function verificarRetornoMP() {
       var params = new URLSearchParams(window.location.search);
       var status = params.get('status');
@@ -543,12 +712,10 @@
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     }
-    // Event listeners
     floatingCart.addEventListener('click', openCart);
     document.getElementById('cartClose').addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', closeCart);
     checkoutBtn.addEventListener('click', abrirPagamento);
-    // Botões "Adicionar" do catálogo
     document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.product-card .btn--small').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
@@ -560,7 +727,6 @@
       });
       verificarRetornoMP();
     });
-    // Filtros
     document.querySelectorAll('.filter-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('filter-btn--active'); });
@@ -575,19 +741,16 @@
         });
       });
     });
-    // Scroll progress
     window.addEventListener('scroll', function() {
       var scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
       document.getElementById('scrollProgress').style.width = scrolled + '%';
     });
-    // Fade-in
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) { entry.target.classList.add('fade-in--visible'); }
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
-    // Expor funções globalmente
     window.addToCart = addToCart;
     window.changeQty = changeQty;
     window.removeFromCart = removeFromCart;
