@@ -3,7 +3,6 @@
 // Cria a preferência de pagamento no Mercado Pago
 // O ACCESS TOKEN fica seguro como variável de ambiente no Netlify
 // ============================================================
-
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
 exports.handler = async (event) => {
@@ -42,7 +41,7 @@ exports.handler = async (event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`  // ← CRASES AQUI
+        'Authorization': `Bearer ${MP_ACCESS_TOKEN}`  // ← CRASES CORRIGIDAS
       },
       body: JSON.stringify(body)
     });
@@ -51,7 +50,11 @@ exports.handler = async (event) => {
 
     if (!mpResponse.ok) {
       console.error('Erro API MP:', mpData);
-      return { statusCode: mpResponse.status, headers, body: JSON.stringify({ error: mpData.message || 'Erro ao criar preferência' }) };
+      return {
+        statusCode: mpResponse.status,
+        headers,
+        body: JSON.stringify({ error: mpData.message || 'Erro ao criar preferência' })
+      };
     }
 
     return {
@@ -62,9 +65,9 @@ exports.handler = async (event) => {
         initPoint: mpData.init_point
       })
     };
+
   } catch (error) {
     console.error('Erro na function:', error);
     return { statusCode: 500, headers, body: JSON.stringify({ error: error.message }) };
   }
 };
-      
