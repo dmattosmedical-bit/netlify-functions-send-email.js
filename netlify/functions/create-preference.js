@@ -1,5 +1,5 @@
 exports.handler = async (event, context) => {
-  // Responde preflight CORS
+  // Permitir CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -21,15 +21,7 @@ exports.handler = async (event, context) => {
 
   try {
     const data = JSON.parse(event.body);
-    const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
-
-    if (!MP_ACCESS_TOKEN) {
-      return {
-        statusCode: 500,
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: 'MP_ACCESS_TOKEN não configurado nas variáveis de ambiente da Netlify' })
-      };
-    }
+    const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || 'SEU_ACCESS_TOKEN_AQUI';
 
     const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
@@ -46,7 +38,10 @@ exports.handler = async (event, context) => {
       return {
         statusCode: response.status,
         headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: preference.message || 'Erro no Mercado Pago', details: preference })
+        body: JSON.stringify({
+          error: preference.message || 'Erro no Mercado Pago',
+          details: preference
+        })
       };
     }
 
