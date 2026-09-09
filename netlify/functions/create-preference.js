@@ -1,5 +1,4 @@
 exports.handler = async (event, context) => {
-  // Permitir CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -38,10 +37,7 @@ exports.handler = async (event, context) => {
       return {
         statusCode: response.status,
         headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({
-          error: preference.message || 'Erro no Mercado Pago',
-          details: preference
-        })
+        body: JSON.stringify({ error: preference.message || 'Erro no Mercado Pago', details: preference })
       };
     }
 
